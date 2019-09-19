@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="30DaysTDD_DI_Better.cs" />
+    <Compile Remove="30DaysTDD_DI_Good.cs" />
+    <Compile Remove="30DaysTDD_DI_Static.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="30DaysTDD_DI_Better.cs" />
+    <None Include="30DaysTDD_DI_Good.cs" />
+    <None Include="30DaysTDD_DI_Static.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.10.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+  </ItemGroup>
+
+</Project>
