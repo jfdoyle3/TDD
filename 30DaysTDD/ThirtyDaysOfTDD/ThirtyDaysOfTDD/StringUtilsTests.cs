@@ -6,7 +6,7 @@ using NUnit.Framework;
  namespace ThirtyDaysOfTDD.UnitTests
  {
      [TestFixture]
-     public class StringUtilsTest
+     public class StringUtilsTests
      {
         [Test]
          public void ShouldBeAbleToCountNumberOfLettersInSimpleSentence()
@@ -33,6 +33,18 @@ using NUnit.Framework;
 
             Assert.AreEqual(expectedResult, result);
         }
-     }
+
+        [Test]
+        // [ExpectedException(typeof(ArgumentException))] <- Code was valid in NUnit 2 it's no loner valid.
+        [TestCase("Error: Argument Exception", typeof(ArgumentException))]        // Same line for NUnit 3.
+        public void ShouldGetAnArgumentExceptionWhenCharacterToScanForIsLargerThanOneCharacter()
+        {
+            var sentenceToScan = "This test should throw an exception";
+            var characterToScanFor = "xx";
+            var stringUtils = new StringUtils();
+
+           stringUtils.FindNumberOfOccurences(sentenceToScan, characterToScanFor);
+        }
+    }
 
  }
