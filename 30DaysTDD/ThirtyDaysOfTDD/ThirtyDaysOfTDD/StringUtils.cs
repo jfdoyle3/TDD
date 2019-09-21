@@ -26,6 +26,7 @@ namespace ThirtyDaysOfTDD.UnitTests
                  numberOfOccurences++;
               }
            }
+
            return numberOfOccurences;   
         }
     }
