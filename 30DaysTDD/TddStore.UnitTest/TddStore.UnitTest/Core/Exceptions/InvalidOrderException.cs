@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace TddStore.UnitTest.Exceptions
+namespace TddStore.Core.Exceptions
 {
-    class InvalidOrderException
+    public class InvalidOrderException : Exception
     {
+
     }
 }

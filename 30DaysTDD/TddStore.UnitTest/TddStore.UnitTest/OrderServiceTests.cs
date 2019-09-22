@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using TddStore.Core;
+using TddStore.Core.Exceptions;
 using Telerik.JustMock;
 
 namespace TddStore.UnitTests
@@ -12,7 +13,7 @@ namespace TddStore.UnitTests
         private OrderService _orderService;
         private IOrderDataService _orderDataService;
 
-        [OneTimeSetUp] // NUnit2 [TestFixtureSetup]
+        [OneTimeSetUp] // NUnit2 ~ [TestFixtureSetup]
         public void SetupOneTime()
         {
             _orderDataService = Mock.Create<IOrderDataService>();
@@ -44,18 +45,26 @@ namespace TddStore.UnitTests
         }
 
         [Test]
-        // [ExpectedException(typeof(InvalidOrderException))]
+
         public void WhenAUserAttemptsToOrderAnItemWithAQuantityOfZeroThrowInvalidOrderException()
         {
             //Arrange
+            var shoppingCart = new ShoppingCart();
+            shoppingCart.Items.Add(new ShoppingCartItem { ItemId = Guid.NewGuid(), Quantity = 0 });
+            var customerId = Guid.NewGuid();
+            var expectedOrderId = Guid.NewGuid();
+
+            Mock.Arrange(() => _orderDataService.Save(Arg.IsAny<Order>()))
+                .Returns(expectedOrderId)
+                .OccursNever();
 
             //Act
-           
-           
+
 
 
             //Assert
             Assert.That(() =>_orderService.PlaceOrder(customerId, shoppingCart),  Throws.TypeOf<InvalidOrderException>());
+
             Mock.Assert(_orderDataService);
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using TddStore.Core.Exceptions;
 
 namespace TddStore.Core
 {
@@ -13,9 +14,16 @@ namespace TddStore.Core
 
         public object PlaceOrder(Guid customerId, ShoppingCart shoppingCart)
         {
+            foreach (var item in shoppingCart.Items)
+            {
+                if (item.Quantity == 0)
+                {
+                    throw new InvalidOrderException();
+                }
+            }
+
             var order = new Order();
             return _orderDataService.Save(order);
-          //  return Guid.NewGuid();   uncomment out to fail test
         }
 
         
