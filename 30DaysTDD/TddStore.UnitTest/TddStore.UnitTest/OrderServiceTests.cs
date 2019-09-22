@@ -59,13 +59,19 @@ namespace TddStore.UnitTests
                 .OccursNever();
 
             //Act
-
-
+            try
+            {
+                _orderService.PlaceOrder(customerId, shoppingCart);
+            }
+            catch (InvalidOrderException ex)
+            {
+                //Assert
+                Mock.Assert(_orderDataService);
+                Assert.Pass();
+            }
 
             //Assert
-            Assert.That(() =>_orderService.PlaceOrder(customerId, shoppingCart),  Throws.TypeOf<InvalidOrderException>());
-
-            Mock.Assert(_orderDataService);
+            Assert.Fail();
         }
     }
 }
