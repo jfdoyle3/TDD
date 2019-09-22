@@ -12,12 +12,18 @@ namespace TddStore.UnitTests
     {
         private OrderService _orderService;
         private IOrderDataService _orderDataService;
+        private ICustomerService _customerService;
+        
 
         [OneTimeSetUp] // NUnit2 ~ [TestFixtureSetup]
         public void SetupOneTime()
         {
             _orderDataService = Mock.Create<IOrderDataService>();
-            _orderService = new OrderService(_orderDataService);
+            _customerService = Mock.Create<ICustomerService>();
+            _customerService = Mock.Create<ICustomerService>();
+            _orderService = new OrderService(_orderDataService,_customerService);
+            
+
         }
 
 
@@ -34,7 +40,7 @@ namespace TddStore.UnitTests
             Mock.Arrange(() => _orderDataService.Save(Arg.IsAny<Order>()))
                 .Returns(expectedOrderId)
                 .OccursOnce();
-            var orderService = new OrderService(_orderDataService);
+           
 
             //Act
             var result = _orderService.PlaceOrder(customerId, shoppingCart);
@@ -72,6 +78,29 @@ namespace TddStore.UnitTests
 
             //Assert
             Assert.Fail();
+        }
+
+        [Test]
+        public void WhenAValidCustomerPlacesAValidOrderAnOrderShouldBePlaced()
+        {
+            //Arrange
+            var shoppingCart = new ShoppingCart();
+            shoppingCart.Items.Add(new ShoppingCartItem { ItemId = Guid.NewGuid(), Quantity = 1 });
+            var customerId = Guid.NewGuid();
+            var customerToReturn = new Customer { Id = customerId, FirstName = "Fred", LastName = "Flintstone" };
+
+            Mock.Arrange(() => _customerService.GetCustomer(customerId))
+                            .Returns(customerToReturn)
+                            .OccursOnce();
+
+
+            //Act
+            _orderService.PlaceOrder(customerId, shoppingCart);
+
+            //Assert
+
+            Mock.Assert(_customerService);
+
         }
     }
 }
