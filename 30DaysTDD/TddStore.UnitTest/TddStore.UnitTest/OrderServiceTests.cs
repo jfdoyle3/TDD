@@ -9,6 +9,17 @@ namespace TddStore.UnitTests
     [TestFixture]
     class OrderServiceTests
     {
+        private OrderService _orderService;
+        private IOrderDataService _orderDataService;
+
+        [OneTimeSetUp] // NUnit2 [TestFixtureSetup]
+        public void SetupOneTime()
+        {
+            _orderDataService = Mock.Create<IOrderDataService>();
+            _orderService = new OrderService(_orderDataService);
+        }
+
+
         [Test]
         public void WhenUserPlacesACorrectOrderThenAnOrderNumberShouldBeReturned()
         {
@@ -18,18 +29,34 @@ namespace TddStore.UnitTests
             var customerId = Guid.NewGuid();
             var expectedOrderId = Guid.NewGuid();
 
-            var orderDataService = Mock.Create<IOrderDataService>();
-            Mock.Arrange(() => orderDataService.Save(Arg.IsAny<Order>()))
+     
+            Mock.Arrange(() => _orderDataService.Save(Arg.IsAny<Order>()))
                 .Returns(expectedOrderId)
                 .OccursOnce();
-            var orderService = new OrderService(orderDataService);
+            var orderService = new OrderService(_orderDataService);
 
             //Act
-            var result = orderService.PlaceOrder(customerId, shoppingCart);
+            var result = _orderService.PlaceOrder(customerId, shoppingCart);
 
             //Assert
             Assert.AreEqual(expectedOrderId, result);
-            Mock.Assert(orderDataService);
+            Mock.Assert(_orderDataService);
+        }
+
+        [Test]
+        // [ExpectedException(typeof(InvalidOrderException))]
+        public void WhenAUserAttemptsToOrderAnItemWithAQuantityOfZeroThrowInvalidOrderException()
+        {
+            //Arrange
+
+            //Act
+           
+           
+
+
+            //Assert
+            Assert.That(() =>_orderService.PlaceOrder(customerId, shoppingCart),  Throws.TypeOf<InvalidOrderException>());
+            Mock.Assert(_orderDataService);
         }
     }
 }
